@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  web:
+    build:
+      context: ./web
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ../:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./db
+    environment:
+      - POSTGRES_DB=djadock
+      - POSTGRES_USER=djadock
+      - POSTGRES_PASSWORD=djadock
+    volumes:
+      - djadock:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  djadock:
+    driver: "local"
