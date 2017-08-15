@@ -9,6 +9,11 @@ cd docker/
 docker-compose -f docker-compose.dev.yml run web django-admin.py startproject <your_app_name> .
 ```
 
+Go to the root folder of your application and change the ownership of the new files:
+```bash
+sudo chown -R $USER:$USER .
+```
+
 In <your_app_name>/settings.py replace the DATABASES = ... with the following:
 ```python
 DATABASES = {
@@ -21,11 +26,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
     }
 }
-```
-
-Go to the root folder of your application and change the ownership of the new files:
-```bash
-sudo chown -R $USER:$USER .
 ```
 
 Run application:
