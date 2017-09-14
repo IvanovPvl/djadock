@@ -2,10 +2,11 @@
 Simple template for Django + PostgreSQL applications.
 
 ## Create new Django project
-In docker-compose.dev.yml replace environment settings for db service.
+In env.dev replace environment settings for db service.
 
 ```bash
 cd docker/
+docker-compose -f docker-compose.dev.yml build web
 docker-compose -f docker-compose.dev.yml run web django-admin.py startproject <your_app_name> .
 ```
 
@@ -19,8 +20,8 @@ In <your_app_name>/settings.py replace the DATABASES = ... with the following:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST': 'db',
-        'PORT': 5432,
+        'HOST': os.environ.get('DB_SERVICE', ''),
+        'PORT': os.environ.get('DB_PORT', 5432),
         'NAME': os.environ.get('POSTGRES_DB', ''),
         'USER': os.environ.get('POSTGRES_USER', ''),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),

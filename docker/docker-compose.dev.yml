@@ -3,28 +3,29 @@ version: '2'
 services:
 
   web:
-    build:
-      context: ./web
-    command: python3 manage.py runserver 0.0.0.0:8000
+    restart: always
+    build: ./web
     volumes:
       - ../:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+    env_file: env.dev
+    command: python3 manage.py runserver 0.0.0.0:8000
 
   db:
-    build:
-      context: ./db
-    environment:
-      - POSTGRES_DB=djadock
-      - POSTGRES_USER=djadock
-      - POSTGRES_PASSWORD=djadock
-    volumes:
-      - djadock:/var/lib/postgresql/data
+    restart: always
+    image: postgres:9.6
+    env_file: env.dev
+    volumes_from:
+      - data
     ports:
       - "5432:5432"
 
-volumes:
-  djadock:
-    driver: "local"
+  data:
+    restart: always
+    image: alpine
+    volumes:
+      - /var/lib/postgresql
+    command: "true"
